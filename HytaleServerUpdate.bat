@@ -8,11 +8,11 @@ set "TMP=%ROOT%\updater\_extract"
 echo [Update] Running hytale-downloader...
 hytale-downloader\hytale-downloader.exe
 if errorlevel 1 (
-  echo [Update] ERROR: downloader failed
+  echo [Update] ERROR: Downloader Failed
   exit /b 1
 )
 
-REM ---- Find newest version zip in ROOT (not Assets.zip) ----
+REM ---- Find newest version zip. ----
 set "ZIP="
 for /f "delims=" %%Z in ('dir /b /a:-d /o-d "%ROOT%\20*.zip"') do (
   set "ZIP=%ROOT%\%%Z"
@@ -22,7 +22,7 @@ for /f "delims=" %%Z in ('dir /b /a:-d /o-d "%ROOT%\20*.zip"') do (
 :foundzip
 
 if not defined ZIP (
-  echo [Update] ERROR: No version zip found
+  echo [Update] ERROR: No version zip found!
   exit /b 2
 )
 
@@ -40,7 +40,7 @@ if errorlevel 1 (
   exit /b 3
 )
 
-REM ---- Normalize payload root ----
+REM ---- Normalize payload root. ----
 set "PAYLOAD=%TMP%"
 if not exist "%PAYLOAD%\Assets.zip" (
   for /f "delims=" %%D in ('dir /b /ad "%TMP%"') do (
@@ -57,7 +57,7 @@ if not exist "%PAYLOAD%\Assets.zip" (
   exit /b 4
 )
 
-REM ---- Backup current distro ----
+REM ---- Backup current distro. ----
 set "BK=%ROOT%\Backups\%VER%"
 mkdir "%BK%\Server" >nul 2>&1
 
@@ -66,7 +66,7 @@ if exist "%ROOT%\Server\HytaleServer.jar" copy /y "%ROOT%\Server\HytaleServer.ja
 if exist "%ROOT%\Server\HytaleServer.aot" copy /y "%ROOT%\Server\HytaleServer.aot" "%BK%\Server\HytaleServer.aot" >nul
 if exist "%ROOT%\Server\Licenses" xcopy /s /e /i /y "%ROOT%\Server\Licenses" "%BK%\Server\Licenses" >nul
 
-REM ---- APPLY (this is the part you were missing) ----
+REM ---- APPLY ----
 echo [Update] Applying distribution files...
 
 copy /y "%PAYLOAD%\Assets.zip" "%ROOT%\Assets.zip" >nul
@@ -88,3 +88,4 @@ del /f /q "%ZIP%" >nul
 
 echo [Update] Done.
 exit /b 0
+
